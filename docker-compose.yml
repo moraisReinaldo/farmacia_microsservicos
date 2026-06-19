@@ -1,0 +1,37 @@
+version: '3.8'
+
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: farmacia-mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: root123
+      MYSQL_DATABASE: farmacia_db
+      MYSQL_USER: farmacia
+      MYSQL_PASSWORD: farmacia123
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - farmacia-network
+
+  rabbitmq:
+    image: rabbitmq:3.12-management
+    container_name: farmacia-rabbitmq
+    environment:
+      RABBITMQ_DEFAULT_USER: farmacia
+      RABBITMQ_DEFAULT_PASS: farmacia123
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    networks:
+      - farmacia-network
+
+volumes:
+  mysql_data:
+
+networks:
+  farmacia-network:
+    driver: bridge
