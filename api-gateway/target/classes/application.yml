@@ -1,0 +1,63 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: api-gateway
+  cloud:
+    gateway:
+      globalcors:
+        corsConfigurations:
+          '[/**]':
+            allowedOrigins: "*"
+            allowedMethods: "*"
+            allowedHeaders: "*"
+      routes:
+        - id: produto-service
+          uri: lb://produto-service
+          predicates:
+            - Path=/api/produtos/**
+
+        - id: cliente-service
+          uri: lb://cliente-service
+          predicates:
+            - Path=/api/clientes/**
+
+        - id: venda-service
+          uri: lb://venda-service
+          predicates:
+            - Path=/api/vendas/**, /api/vendedores/**
+
+        - id: estoque-service
+          uri: lb://estoque-service
+          predicates:
+            - Path=/api/estoque/**
+
+        - id: nota-fiscal-service
+          uri: lb://nota-fiscal-service
+          predicates:
+            - Path=/api/notas-fiscais/**
+
+        - id: receita-service
+          uri: lb://receita-service
+          predicates:
+            - Path=/api/receitas/**
+
+        - id: desconto-service
+          uri: lb://desconto-service
+          predicates:
+            - Path=/api/descontos/**
+
+        - id: relatorio-service
+          uri: lb://relatorio-service
+          predicates:
+            - Path=/api/relatorios/**
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+
+logging:
+  level:
+    org.springframework.cloud.gateway: DEBUG
